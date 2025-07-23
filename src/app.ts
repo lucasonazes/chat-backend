@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('API online!');
+  res.send('Real time chat API - Created by Lucas Onazes Fensterseifer');
 });
 
 export default app;
