@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv
+.env
+.env.*.local
+
+# Prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/migrations/
+
+# TypeScript
+dist/
+build/
+*.tsbuildinfo
+
+# VSCode
+.vscode/
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Optional cache folders
+.cache/
+.next/
+
+/src/generated/prisma

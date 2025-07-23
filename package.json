@@ -1,0 +1,34 @@
+{
+  "name": "chat-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
+  },
+  "repository": "https://github.com/lucasonazes/chat-backend.git",
+  "author": "lucasonazes <lucasonazes@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "prisma": "^6.12.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
+  }
+}
