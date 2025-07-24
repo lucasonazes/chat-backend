@@ -1,10 +1,16 @@
 import { Router } from 'express';
 import prisma from '../config/prisma';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const messageRoutes = Router();
 
-messageRoutes.post('/', async (req, res) => {
-  const { content, senderId, receiverId } = req.body;
+messageRoutes.post('/', authenticateToken, async (req: AuthRequest, res) => {
+  const { content, receiverId } = req.body;
+  const senderId = req.user?.userId;
+
+  if (!senderId || !receiverId || !content) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
 
   try {
     const message = await prisma.message.create({
@@ -17,7 +23,7 @@ messageRoutes.post('/', async (req, res) => {
   }
 });
 
-messageRoutes.get('/:user1/:user2', async (req, res) => {
+messageRoutes.get('/:user1/:user2', authenticateToken, async (req, res) => {
   const { user1, user2 } = req.params;
 
   try {
