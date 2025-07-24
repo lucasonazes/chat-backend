@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "repository": "https://github.com/lucasonazes/chat-backend.git",
   "author": "lucasonazes <lucasonazes@gmail.com>",
@@ -20,6 +21,8 @@
     "prisma": "^6.12.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.31.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
@@ -31,6 +34,7 @@
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.3.0",
+    "husky": "^9.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
