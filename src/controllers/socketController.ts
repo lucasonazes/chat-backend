@@ -1,26 +1,18 @@
 import { Server, Socket } from 'socket.io';
-
-interface MessagePayload {
-  content: string;
-  senderId: string;
-  receiverId: string;
-}
+import prisma from '../config/prisma';
 
 export default function handleSocketEvents(io: Server, socket: Socket) {
   socket.on('join', (userId: string) => {
     socket.join(userId);
-    console.log(`User ${userId} joined room`);
   });
 
-  socket.on('sendMessage', (data: MessagePayload) => {
-    const { content, senderId, receiverId } = data;
-
-    io.to(receiverId).emit('receiveMessage', {
-      content,
-      senderId,
-      receiverId,
-      createdAt: new Date().toISOString()
+  socket.on('sendMessage', async ({ content, senderId, receiverId }) => {
+    const message = await prisma.message.create({
+      data: { content, senderId, receiverId }
     });
+
+    io.to(receiverId).emit('receiveMessage', message);
+    io.to(senderId).emit('receiveMessage', message);
   });
 
   socket.on('disconnect', () => {});
