@@ -2,10 +2,11 @@ import { Router } from 'express';
 import prisma from '../config/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const userRoutes = Router();
 
-userRoutes.post('/', async (req, res) => {
+userRoutes.post('/', authenticateToken, async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -21,7 +22,7 @@ userRoutes.post('/', async (req, res) => {
   }
 });
 
-userRoutes.get('/', async (req, res) => {
+userRoutes.get('/', authenticateToken, async (req, res) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -35,6 +36,46 @@ userRoutes.get('/', async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching users', message: error });
+  }
+});
+
+userRoutes.get('/me', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true
+      }
+    });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching user', message: error });
+  }
+});
+
+userRoutes.get('/:userId', authenticateToken, async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true
+      }
+    });
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching current user', message: error });
   }
 });
 

@@ -23,7 +23,5 @@ export default function handleSocketEvents(io: Server, socket: Socket) {
     });
   });
 
-  socket.on('disconnect', () => {
-    console.log('Socket disconnected', socket.id);
-  });
+  socket.on('disconnect', () => {});
 }
