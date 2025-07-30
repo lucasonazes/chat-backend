@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { verifyToken } from '../utils/token';
 
 export interface AuthRequest extends Request {
   user?: { userId: string; email: string };
@@ -12,7 +12,7 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
   if (!token) return res.status(401).json({ error: 'Token not provided' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+    const decoded = verifyToken(token) as {
       userId: string;
       email: string;
     };

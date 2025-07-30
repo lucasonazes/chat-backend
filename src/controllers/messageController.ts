@@ -1,10 +1,9 @@
-import { Router } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middleware/auth';
 import prisma from '../config/prisma';
-import { authenticateToken, AuthRequest } from '../middleware/auth';
+import { Server } from 'socket.io';
 
-const messageRoutes = Router();
-
-messageRoutes.post('/', authenticateToken, async (req: AuthRequest, res) => {
+export const createMessage = async (req: AuthRequest, res: Response) => {
   const { content, receiverId } = req.body;
   const senderId = req.user?.userId;
 
@@ -21,9 +20,9 @@ messageRoutes.post('/', authenticateToken, async (req: AuthRequest, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error creating message', message: error });
   }
-});
+};
 
-messageRoutes.get('/:user1/:user2', authenticateToken, async (req, res) => {
+export const getConversation = async (req: AuthRequest, res: Response) => {
   const { user1, user2 } = req.params;
 
   try {
@@ -41,6 +40,17 @@ messageRoutes.get('/:user1/:user2', authenticateToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error fetching messages', message: error });
   }
-});
+};
 
-export default messageRoutes;
+export const createMessageSocket = async (io: Server, senderId: string, receiverId: string, content: string) => {
+  if (!senderId || !receiverId || !content) return;
+
+  const message = await prisma.message.create({
+    data: { content, senderId, receiverId }
+  });
+
+  io.to(receiverId).emit('receiveMessage', message);
+  io.to(senderId).emit('receiveMessage', message);
+
+  return message;
+};
