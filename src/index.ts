@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes';
 import messageRoutes from './routes/messageRoutes';
 import setupSocket from './sockets';
 import authRoutes from './routes/authRoutes';
+import path from 'path';
 
 dotenv.config();
 
@@ -18,11 +19,15 @@ const io = new Server(server, {
   cors: {
     origin: FRONT_URL,
     methods: ['GET', 'POST']
-  }
+  },
+  maxHttpBufferSize: 10 * 1024 * 1024 // 10 MB
 });
 
 app.use(cors());
 app.use(express.json());
+
+const uploadPath = path.resolve(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadPath));
 
 app.get('/', (req, res) => {
   res.send('Real time chat API - Created by Lucas Onazes Fensterseifer');

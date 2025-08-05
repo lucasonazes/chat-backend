@@ -13,14 +13,16 @@ model User {
   email String @unique
   password String
   createdAt DateTime @default(now())
-  
+
   messagesSent Message[] @relation("SentMessages")
   messagesReceived Message[] @relation("ReceivedMessages")
 }
 
 model Message {
   id String @id @default(uuid())
-  content String
+  content String?
+  fileUrl String?
+  fileType String?
   createdAt DateTime @default(now())
   senderId String
   receiverId String

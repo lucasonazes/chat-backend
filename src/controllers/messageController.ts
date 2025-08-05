@@ -3,25 +3,6 @@ import { AuthRequest } from '../middleware/auth';
 import prisma from '../config/prisma';
 import { Server } from 'socket.io';
 
-export const createMessage = async (req: AuthRequest, res: Response) => {
-  const { content, receiverId } = req.body;
-  const senderId = req.user?.userId;
-
-  if (!senderId || !receiverId || !content) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
-  try {
-    const message = await prisma.message.create({
-      data: { content, senderId, receiverId }
-    });
-
-    res.status(201).json(message);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating message', message: error });
-  }
-};
-
 export const getConversation = async (req: AuthRequest, res: Response) => {
   const { user1, user2 } = req.params;
 
