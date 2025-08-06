@@ -1,8 +1,9 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import prisma from '../config/prisma';
+import { ApiError } from '../middleware/errorHandler';
 
-export const getUsers = async (req: AuthRequest, res: Response) => {
+export const getUsers = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -13,13 +14,13 @@ export const getUsers = async (req: AuthRequest, res: Response) => {
       }
     });
 
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching users', message: error });
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
   }
 };
 
-export const getMe = async (req: AuthRequest, res: Response) => {
+export const getMe = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user!.userId },
@@ -31,13 +32,13 @@ export const getMe = async (req: AuthRequest, res: Response) => {
       }
     });
 
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching user', message: error });
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
   }
 };
 
-export const getUserById = async (req: AuthRequest, res: Response) => {
+export const getUserById = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { userId } = req.params;
 
   try {
@@ -51,10 +52,10 @@ export const getUserById = async (req: AuthRequest, res: Response) => {
       }
     });
 
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) throw new ApiError(404, 'USER_NOT_FOUND', 'User not found');
 
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching current user', message: error });
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
   }
 };

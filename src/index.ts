@@ -8,6 +8,7 @@ import messageRoutes from './routes/messageRoutes';
 import setupSocket from './sockets';
 import authRoutes from './routes/authRoutes';
 import path from 'path';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -38,6 +39,8 @@ app.use('/users', userRoutes);
 app.use('/messages', messageRoutes);
 
 setupSocket(io);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

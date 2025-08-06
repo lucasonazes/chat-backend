@@ -1,17 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/token';
+import { ApiError } from './errorHandler';
 
 export interface AuthRequest extends Request {
   user?: { userId: string; email: string };
 }
 
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader?.split(' ')[1];
-
-  if (!token) return res.status(401).json({ error: 'Token not provided' });
-
   try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.split(' ')[1];
+
+    if (!token) throw new ApiError(401, 'UNAUTHORIZED', 'No token provided');
+
     const decoded = verifyToken(token) as {
       userId: string;
       email: string;
@@ -19,7 +20,7 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
 
     req.user = decoded;
     next();
-  } catch (error) {
-    return res.status(403).json({ error: 'Invalid Token', message: error });
+  } catch (err) {
+    next(err);
   }
 }
