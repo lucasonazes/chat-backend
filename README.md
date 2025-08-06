@@ -1,104 +1,124 @@
 # Real-Time Chat Backend
 
-This is a Node.js backend for a real-time chat application built with Express, Socket.IO, and Prisma (PostgreSQL). It provides REST APIs for user and message management, authentication, and real-time messaging via websockets.
+A robust, scalable backend for a real-time chat application supporting text, image, and document messages. Built with Node.js, Express, TypeScript, Socket.IO, Prisma, and PostgreSQL. Features JWT authentication, Zod validation and a clean, maintainable architecture.
 
-## Features
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Node.js, Express, TypeScript, Socket.IO, Prisma ORM
+- **Database:** PostgreSQL
+- **Authentication:** JWT (JSON Web Tokens)
+- **Validation:** Zod
+- **Password Hashing:** bcrypt
+- **Development Tools:** ESLint, Prettier, EditorConfig, Commitlint, Husky, tsconfig
+
+---
+
+## 🚀 Features
 
 - User registration and login with JWT authentication
-- RESTful endpoints for users and messages
-- Real-time messaging using Socket.IO
 - Secure password hashing with bcrypt
-- Prisma ORM for database access (PostgreSQL)
-- Environment-based configuration
-- Linting and formatting with ESLint and Prettier
-- Commit message linting with Husky and Commitlint
+- Real-time messaging (text, images, documents) via Socket.IO
+- File uploads with validation
+- API validation using Zod schemas
+- Centralized error handling with custom middleware
+- Session expiration and auto logout on token expiration
+- Clean architecture: controllers, routes, middleware, services
+- Developer workflow: linting, formatting, commit hooks, strict TypeScript
 
-## Project Structure
+---
 
-```
-src/
-  index.ts                # Entry point
-  config/prisma.ts        # Prisma client setup
-  controllers/            # Route and socket controllers
-  middleware/             # Authentication middleware
-  routes/                 # Express route definitions
-  sockets/                # Socket.IO setup
-  types/                  # Type definitions
-  utils/                  # Utility functions
-prisma/
-  schema.prisma           # Database schema
-  migrations/             # Prisma migrations
-```
-
-## Getting Started
-
-### Prerequisites
+## 📋 Requirements
 
 - Node.js >= 18
-- PostgreSQL database
+- PostgreSQL >= 14
 
-### Installation
+---
 
-```sh
-git clone https://github.com/lucasonazes/chat-backend.git
-cd chat-backend
-npm install
+## ⚡ Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repo-url>
+cd project-folder
 ```
 
-### Environment Variables
+### 2. Install dependencies
+
+```bash
+yarn install
+```
+
+### 3. Configure environment variables
 
 Create a `.env` file in the root directory:
 
-```
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+```env
+# .env.example
+DATABASE_URL=postgresql://user:password@localhost:5432/chatdb
 JWT_SECRET=your_jwt_secret
-FRONT_URL=http://localhost:3000
 PORT=3001
+FRONT_URL=http://localhost:3000
+BACKEND_URL=http://localhost:3001
 ```
 
-### Database Setup
+### 4. Run database migrations
 
-Run Prisma migrations:
-
-```sh
+```bash
 npx prisma migrate dev
 ```
 
-### Running the Server
+### 5. Start the development server
 
-```sh
-npm run dev
+```bash
+yarn dev
 ```
 
-### Linting & Formatting
+---
 
-```sh
-npm run lint
-npm run format
-```
+## 🗂️ API Endpoints
 
-## API Endpoints
+### Auth
 
-- `POST /register` - Register a new user
-- `POST /login` - Login and receive JWT
-- `GET /users` - Get all users (auth required)
-- `GET /users/me` - Get current user (auth required)
-- `GET /users/:userId` - Get user by ID (auth required)
-- `POST /messages` - Send a message (auth required)
-- `GET /messages/:user1/:user2` - Get conversation between two users (auth required)
+- `POST /register` — Register a new user
+- `POST /login` — Login and receive JWT
 
-## Real-Time Messaging
+### Users
 
-Clients connect via Socket.IO and authenticate using JWT. Events:
+- `GET /users` — List all users (auth required)
+- `GET /users/me` — Get current user profile (auth required)
+- `GET /users/:userId` — Get user by ID (auth required)
 
-- `join` - Join a user room
-- `sendMessage` - Send a message to another user
-- `receiveMessage` - Receive a message
+### Messages
 
-## License
+- `POST /messages` — Send a message (auth required)
+- `GET /messages/:user1/:user2` — Get conversation between two users (auth required)
 
-MIT
+---
 
-## Author
+## 🔌 Socket.IO Events
 
-Lucas Onazes Fensterseifer
+- `connection` — Client connects (must send JWT in handshake)
+- `join` — Join a user room
+- `sendMessage` — Send a message (text, image, or document)
+- `receiveMessage` — Receive a message
+- `disconnect` — Client disconnects
+
+---
+
+## 📦 Scripts
+
+- `yarn dev` — Start server in development mode
+- `yarn build` — Build TypeScript for production
+- `yarn start` — Start server in production mode
+- `yarn lint` — Run ESLint
+- `yarn format` — Run Prettier
+- `yarn prepare` — Run Husky
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
