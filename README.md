@@ -24,8 +24,8 @@ A robust, scalable backend for a real-time chat application supporting text, ima
 - API validation using Zod schemas
 - Centralized error handling with custom middleware
 - Session expiration and auto logout on token expiration
-- Clean architecture: controllers, routes, middleware, services
-- Developer workflow: linting, formatting, commit hooks, strict TypeScript
+- Clean architecture: controllers, routes, middleware and services
+- Developer workflow: linting, formatting, commit hooks and strict TypeScript
 
 ---
 
